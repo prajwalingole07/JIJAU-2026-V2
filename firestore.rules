@@ -1,0 +1,33 @@
+rules_version = '2';
+
+// Starting-point Firestore security rules for Jijau SchoolConnect.
+//
+// This keeps the database readable/writable only by people who are signed
+// in through Firebase Authentication. Because this app currently uses its
+// own username/password login (not Firebase Auth), the simplest way to wire
+// this up for a private internal tool is:
+//
+//   1. Keep these rules as-is and use Firebase App Check / a shared secret,
+//      OR
+//   2. (Recommended for production) add Firebase Authentication (e.g.
+//      anonymous sign-in triggered right after a successful login in this
+//      app) so `request.auth != null` is true for every legitimate user.
+//
+// Until Firebase Authentication is wired in, you can temporarily widen
+// access while you test (NOT recommended once real student/payment data is
+// involved):
+//
+//   match /{document=**} {
+//     allow read, write: if true;
+//   }
+//
+// Ask your developer to tighten these further (e.g. per-role checks) before
+// going live with real student and payment data.
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /{document=**} {
+      allow read, write: if request.auth != null;
+    }
+  }
+}
