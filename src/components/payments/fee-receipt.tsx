@@ -247,7 +247,7 @@ export function FeeReceiptDialog({ payment, student, open, onOpenChange, collect
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="flex max-h-[96svh] w-[96vw] max-w-lg flex-col overflow-hidden p-0">
+      <DialogContent className="flex max-h-[96svh] w-[96vw] max-w-lg flex-col overflow-y-auto p-0">
         <DialogHeader className="sr-only">
           <DialogTitle>Fee Receipt {receiptId}</DialogTitle>
         </DialogHeader>
