@@ -407,7 +407,7 @@ export default function FeesAndSalaryPage() {
 
         {/* Student Ledger Dialog */}
         <Dialog open={studentHistoryOpen} onOpenChange={setStudentHistoryOpen}>
-          <DialogContent className="flex max-h-[94svh] w-[96vw] max-w-[1000px] flex-col overflow-y-auto border-none p-0 shadow-2xl md:h-[90vh] rounded-2xl">
+           <DialogContent className="flex max-h-[94svh] w-[96vw] max-w-[1000px] flex-col overflow-hidden border-none p-0 shadow-2xl md:h-[90vh] rounded-2xl">
             <DialogHeader className="sr-only">
               <DialogTitle>Student Fee Ledger - {selectedStudent?.fullName}</DialogTitle>
             </DialogHeader>
