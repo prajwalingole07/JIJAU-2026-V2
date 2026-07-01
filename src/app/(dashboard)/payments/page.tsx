@@ -296,7 +296,7 @@ export default function FeesAndSalaryPage() {
 
         {/* Staff Ledger Dialog */}
         <Dialog open={staffHistoryOpen} onOpenChange={setStaffHistoryOpen}>
-          <DialogContent className="flex max-h-[94svh] w-[96vw] max-w-[1000px] flex-col overflow-hidden border-none p-0 shadow-2xl md:h-[90vh] rounded-2xl">
+          <DialogContent className="flex max-h-[92svh] w-[95vw] max-w-[1000px] flex-col overflow-hidden border-none p-0 shadow-2xl md:h-[85vh] rounded-2xl">
             <DialogHeader className="sr-only">
               <DialogTitle>Staff Salary Profile - {selectedStaff?.fullName}</DialogTitle>
               <DialogDescription>Detailed ledger and transaction recording for {selectedStaff?.fullName}</DialogDescription>
@@ -311,18 +311,18 @@ export default function FeesAndSalaryPage() {
               </div>
             </div>
 
-            <div className="flex min-h-0 flex-1 flex-col overflow-hidden bg-white md:flex-row">
-              <div className="flex max-h-[42svh] w-full flex-col border-b border-gray-100 md:max-h-none md:w-[45%] md:border-b-0 md:border-r">
-                <div className="p-6 border-b border-gray-100 flex items-center justify-between bg-gray-50/50">
-                  <div className="flex items-center gap-2 text-primary">
-                    <History className="h-4 w-4" />
-                    <span className="text-[11px] font-black uppercase tracking-widest">Transaction Audit Trail</span>
+            <div className="min-h-0 flex-1 overflow-y-auto md:overflow-hidden">
+              <div className="flex flex-col md:h-full md:flex-row">
+                <div className="w-full border-b border-gray-100 md:h-full md:w-[45%] md:overflow-y-auto md:border-b-0 md:border-r">
+                  <div className="sticky top-0 z-10 p-6 border-b border-gray-100 flex items-center justify-between bg-gray-50/95 backdrop-blur">
+                    <div className="flex items-center gap-2 text-primary">
+                      <History className="h-4 w-4" />
+                      <span className="text-[11px] font-black uppercase tracking-widest">Transaction Audit Trail</span>
+                    </div>
                   </div>
-                </div>
-                <ScrollArea className="flex-1 p-6">
-                  <div className="space-y-4">
+                  <div className="p-6 space-y-4">
                     {payments.filter(p => p.teacherId === selectedStaff?.id).length === 0 ? (
-                      <div className="py-20 text-center flex flex-col items-center gap-3 text-gray-300">
+                      <div className="py-16 text-center flex flex-col items-center gap-3 text-gray-300">
                         <History className="h-10 w-10 opacity-20" />
                         <p className="text-xs font-black uppercase tracking-widest">No transactions yet</p>
                       </div>
@@ -351,55 +351,55 @@ export default function FeesAndSalaryPage() {
                         ))
                     )}
                   </div>
-                </ScrollArea>
-              </div>
+                </div>
 
-              <div className="flex min-h-0 flex-1 flex-col bg-white">
-                <ScrollArea className="flex-1 p-5 sm:p-8">
-                  <div className="grid grid-cols-1 gap-4 mb-8 sm:grid-cols-2 sm:mb-10">
-                    <div className="bg-orange-50 p-6 rounded-2xl border border-orange-100">
-                      <p className="text-[10px] font-black text-[#3B82F6] uppercase tracking-widest">Monthly Salary</p>
-                      <p className="text-2xl font-black text-[#1F2937]">₹{selectedStaff?.baseSalary.toLocaleString()}</p>
+                <div className="w-full bg-white md:h-full md:flex-1 md:overflow-y-auto">
+                  <div className="p-5 sm:p-8">
+                    <div className="grid grid-cols-1 gap-4 mb-8 sm:grid-cols-2 sm:mb-10">
+                      <div className="bg-orange-50 p-6 rounded-2xl border border-orange-100">
+                        <p className="text-[10px] font-black text-[#3B82F6] uppercase tracking-widest">Monthly Salary</p>
+                        <p className="text-2xl font-black text-[#1F2937]">₹{selectedStaff?.baseSalary.toLocaleString()}</p>
+                      </div>
+                      <div className="bg-[#F0FDF4] p-6 rounded-2xl border border-green-50">
+                        <p className="text-[10px] font-black text-[#22C55E] uppercase tracking-widest">Total Paid</p>
+                        <p className="text-2xl font-black text-[#1F2937]">₹{payments.filter(p => p.teacherId === selectedStaff?.id).reduce((sum, p) => sum + p.amount, 0).toLocaleString()}</p>
+                      </div>
                     </div>
-                    <div className="bg-[#F0FDF4] p-6 rounded-2xl border border-green-50">
-                      <p className="text-[10px] font-black text-[#22C55E] uppercase tracking-widest">Total Paid</p>
-                      <p className="text-2xl font-black text-[#1F2937]">₹{payments.filter(p => p.teacherId === selectedStaff?.id).reduce((sum, p) => sum + p.amount, 0).toLocaleString()}</p>
-                    </div>
+                    <form onSubmit={handleStaffPayment} className="space-y-5">
+                      <div className="flex items-center gap-2 text-primary border-b border-gray-100 pb-4 mb-4">
+                        <PlusCircle className="h-4 w-4" />
+                        <span className="text-[11px] font-black uppercase tracking-widest">Record Salary Payment</span>
+                      </div>
+                      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                        <div className="space-y-2">
+                          <Label className="text-[10px] font-black text-gray-400 uppercase tracking-widest">Amount Disbursed (₹)</Label>
+                          <Input type="number" className="bg-gray-50 border-none h-12 rounded-xl font-bold" value={formData.amount} onChange={e => setFormData({...formData, amount: e.target.value})} required />
+                        </div>
+                        <div className="space-y-2">
+                          <Label className="text-[10px] font-black text-gray-400 uppercase tracking-widest">Date</Label>
+                          <Input type="date" className="bg-gray-50 border-none h-12 rounded-xl" value={formData.date} onChange={e => setFormData({...formData, date: e.target.value})} required />
+                        </div>
+                      </div>
+                      <div className="space-y-2">
+                        <Label className="text-[10px] font-black text-gray-400 uppercase tracking-widest">Mode</Label>
+                        <Select value={formData.mode} onValueChange={(val: any) => setFormData({...formData, mode: val})}>
+                          <SelectTrigger className="bg-gray-50 border-none h-12 rounded-xl font-bold"><SelectValue /></SelectTrigger>
+                          <SelectContent><SelectItem value="Cash">Physical Cash</SelectItem><SelectItem value="Online">Online Transfer</SelectItem></SelectContent>
+                        </Select>
+                      </div>
+                      {formData.mode === 'Online' && (
+                        <div 
+                          className="h-24 border-2 border-dashed border-gray-100 rounded-2xl flex flex-col items-center justify-center cursor-pointer hover:bg-gray-50"
+                          onClick={() => fileInputRef.current?.click()}
+                        >
+                          {formData.screenshot ? <p className="text-xs font-bold text-green-600">Proof Attached</p> : <p className="text-xs font-bold text-gray-400">Click to upload proof</p>}
+                          <input type="file" ref={fileInputRef} className="hidden" accept="image/*" onChange={handleFileChange} />
+                        </div>
+                      )}
+                      <Button type="submit" className="w-full bg-primary h-14 font-black rounded-xl shadow-lg mb-2">Commit Payment</Button>
+                    </form>
                   </div>
-                  <form onSubmit={handleStaffPayment} className="space-y-5">
-                    <div className="flex items-center gap-2 text-primary border-b border-gray-100 pb-4 mb-4">
-                      <PlusCircle className="h-4 w-4" />
-                      <span className="text-[11px] font-black uppercase tracking-widest">Record Salary Payment</span>
-                    </div>
-                    <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-                      <div className="space-y-2">
-                        <Label className="text-[10px] font-black text-gray-400 uppercase tracking-widest">Amount Disbursed (₹)</Label>
-                        <Input type="number" className="bg-gray-50 border-none h-12 rounded-xl font-bold" value={formData.amount} onChange={e => setFormData({...formData, amount: e.target.value})} required />
-                      </div>
-                      <div className="space-y-2">
-                        <Label className="text-[10px] font-black text-gray-400 uppercase tracking-widest">Date</Label>
-                        <Input type="date" className="bg-gray-50 border-none h-12 rounded-xl" value={formData.date} onChange={e => setFormData({...formData, date: e.target.value})} required />
-                      </div>
-                    </div>
-                    <div className="space-y-2">
-                      <Label className="text-[10px] font-black text-gray-400 uppercase tracking-widest">Mode</Label>
-                      <Select value={formData.mode} onValueChange={(val: any) => setFormData({...formData, mode: val})}>
-                        <SelectTrigger className="bg-gray-50 border-none h-12 rounded-xl font-bold"><SelectValue /></SelectTrigger>
-                        <SelectContent><SelectItem value="Cash">Physical Cash</SelectItem><SelectItem value="Online">Online Transfer</SelectItem></SelectContent>
-                      </Select>
-                    </div>
-                    {formData.mode === 'Online' && (
-                      <div 
-                        className="h-24 border-2 border-dashed border-gray-100 rounded-2xl flex flex-col items-center justify-center cursor-pointer hover:bg-gray-50"
-                        onClick={() => fileInputRef.current?.click()}
-                      >
-                        {formData.screenshot ? <p className="text-xs font-bold text-green-600">Proof Attached</p> : <p className="text-xs font-bold text-gray-400">Click to upload proof</p>}
-                        <input type="file" ref={fileInputRef} className="hidden" accept="image/*" onChange={handleFileChange} />
-                      </div>
-                    )}
-                    <Button type="submit" className="w-full bg-primary h-14 font-black rounded-xl shadow-lg">Commit Payment</Button>
-                  </form>
-                </ScrollArea>
+                </div>
               </div>
             </div>
           </DialogContent>
@@ -407,7 +407,7 @@ export default function FeesAndSalaryPage() {
 
         {/* Student Ledger Dialog */}
         <Dialog open={studentHistoryOpen} onOpenChange={setStudentHistoryOpen}>
-           <DialogContent className="flex max-h-[94svh] w-[96vw] max-w-[1000px] flex-col overflow-hidden border-none p-0 shadow-2xl md:h-[90vh] rounded-2xl">
+          <DialogContent className="flex max-h-[92svh] w-[95vw] max-w-[1000px] flex-col overflow-hidden border-none p-0 shadow-2xl md:h-[85vh] rounded-2xl">
             <DialogHeader className="sr-only">
               <DialogTitle>Student Fee Ledger - {selectedStudent?.fullName}</DialogTitle>
             </DialogHeader>
@@ -421,18 +421,22 @@ export default function FeesAndSalaryPage() {
               </div>
             </div>
 
-            <div className="flex min-h-0 flex-1 flex-col overflow-hidden bg-white md:flex-row">
-              <div className="flex max-h-[42svh] w-full flex-col border-b border-gray-100 md:max-h-none md:w-[45%] md:border-b-0 md:border-r">
-                <div className="p-6 border-b border-gray-100 bg-gray-50/50">
-                   <div className="flex items-center gap-2 text-[#22C55E]">
-                    <History className="h-4 w-4" />
-                    <span className="text-[11px] font-black uppercase tracking-widest">Fee Collection Ledger</span>
+            {/* Single natural scroll container: on mobile everything (ledger,
+                summary, and the record-payment form) scrolls together as one
+                page so nothing gets clipped off-screen. On desktop it splits
+                into two independently scrolling columns. */}
+            <div className="min-h-0 flex-1 overflow-y-auto md:overflow-hidden">
+              <div className="flex flex-col md:h-full md:flex-row">
+                <div className="w-full border-b border-gray-100 md:h-full md:w-[45%] md:overflow-y-auto md:border-b-0 md:border-r">
+                  <div className="sticky top-0 z-10 p-6 border-b border-gray-100 bg-gray-50/95 backdrop-blur">
+                     <div className="flex items-center gap-2 text-[#22C55E]">
+                      <History className="h-4 w-4" />
+                      <span className="text-[11px] font-black uppercase tracking-widest">Fee Collection Ledger</span>
+                    </div>
                   </div>
-                </div>
-                <ScrollArea className="flex-1 p-6">
-                  <div className="space-y-4">
+                  <div className="p-6 space-y-4">
                     {feePayments.filter(p => p.studentId === selectedStudent?.id).length === 0 ? (
-                      <div className="py-20 text-center flex flex-col items-center gap-3 text-gray-300">
+                      <div className="py-16 text-center flex flex-col items-center gap-3 text-gray-300">
                         <Receipt className="h-10 w-10 opacity-20" />
                         <p className="text-xs font-black uppercase tracking-widest">No fee records found</p>
                       </div>
@@ -464,55 +468,55 @@ export default function FeesAndSalaryPage() {
                         ))
                     )}
                   </div>
-                </ScrollArea>
-              </div>
+                </div>
 
-              <div className="flex min-h-0 flex-1 flex-col bg-white">
-                <ScrollArea className="flex-1 p-5 sm:p-8">
-                  <div className="grid grid-cols-1 gap-4 mb-8 sm:grid-cols-2 sm:mb-10">
-                    <div className="bg-orange-50 p-6 rounded-2xl border border-orange-100">
-                      <p className="text-[10px] font-black text-[#3B82F6] uppercase tracking-widest">Total Course Fee</p>
-                      <p className="text-2xl font-black text-[#1F2937]">₹{selectedStudent?.totalFees.toLocaleString()}</p>
+                <div className="w-full bg-white md:h-full md:flex-1 md:overflow-y-auto">
+                  <div className="p-5 sm:p-8">
+                    <div className="grid grid-cols-1 gap-4 mb-8 sm:grid-cols-2 sm:mb-10">
+                      <div className="bg-orange-50 p-6 rounded-2xl border border-orange-100">
+                        <p className="text-[10px] font-black text-[#3B82F6] uppercase tracking-widest">Total Course Fee</p>
+                        <p className="text-2xl font-black text-[#1F2937]">₹{selectedStudent?.totalFees.toLocaleString()}</p>
+                      </div>
+                      <div className="bg-[#FEF2F2] p-6 rounded-2xl border border-red-50">
+                        <p className="text-[10px] font-black text-[#EF4444] uppercase tracking-widest">Remaining Balance</p>
+                        <p className="text-2xl font-black text-[#EF4444]">₹{(selectedStudent ? selectedStudent.totalFees - selectedStudent.feesPaid : 0).toLocaleString()}</p>
+                      </div>
                     </div>
-                    <div className="bg-[#FEF2F2] p-6 rounded-2xl border border-red-50">
-                      <p className="text-[10px] font-black text-[#EF4444] uppercase tracking-widest">Remaining Balance</p>
-                      <p className="text-2xl font-black text-[#EF4444]">₹{(selectedStudent ? selectedStudent.totalFees - selectedStudent.feesPaid : 0).toLocaleString()}</p>
-                    </div>
+                    <form onSubmit={handleStudentFeePayment} className="space-y-5">
+                      <div className="flex items-center gap-2 text-[#22C55E] border-b border-gray-100 pb-4 mb-4">
+                        <PlusCircle className="h-4 w-4" />
+                        <span className="text-[11px] font-black uppercase tracking-widest">Record Fee Payment</span>
+                      </div>
+                      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                        <div className="space-y-2">
+                          <Label className="text-[10px] font-black text-gray-400 uppercase tracking-widest">Amount Collected (₹)</Label>
+                          <Input type="number" className="bg-gray-50 border-none h-12 rounded-xl font-bold" value={formData.amount} onChange={e => setFormData({...formData, amount: e.target.value})} required />
+                        </div>
+                        <div className="space-y-2">
+                          <Label className="text-[10px] font-black text-gray-400 uppercase tracking-widest">Collection Date</Label>
+                          <Input type="date" className="bg-gray-50 border-none h-12 rounded-xl" value={formData.date} onChange={e => setFormData({...formData, date: e.target.value})} required />
+                        </div>
+                      </div>
+                      <div className="space-y-2">
+                        <Label className="text-[10px] font-black text-gray-400 uppercase tracking-widest">Collection Mode</Label>
+                        <Select value={formData.mode} onValueChange={(val: any) => setFormData({...formData, mode: val})}>
+                          <SelectTrigger className="bg-gray-50 border-none h-12 rounded-xl font-bold"><SelectValue /></SelectTrigger>
+                          <SelectContent><SelectItem value="Cash">Physical Cash</SelectItem><SelectItem value="Online">Online Transfer</SelectItem></SelectContent>
+                        </Select>
+                      </div>
+                      {formData.mode === 'Online' && (
+                        <div 
+                          className="h-24 border-2 border-dashed border-gray-100 rounded-2xl flex flex-col items-center justify-center cursor-pointer hover:bg-gray-50"
+                          onClick={() => fileInputRef.current?.click()}
+                        >
+                          {formData.screenshot ? <p className="text-xs font-bold text-green-600">Receipt Attached</p> : <p className="text-xs font-bold text-gray-400">Click to upload transaction proof</p>}
+                          <input type="file" className="hidden" accept="image/*" onChange={handleFileChange} />
+                        </div>
+                      )}
+                      <Button type="submit" className="w-full bg-[#22C55E] hover:bg-[#22C55E]/90 h-14 font-black rounded-xl shadow-lg mb-2">Save Fee Record</Button>
+                    </form>
                   </div>
-                  <form onSubmit={handleStudentFeePayment} className="space-y-5">
-                    <div className="flex items-center gap-2 text-[#22C55E] border-b border-gray-100 pb-4 mb-4">
-                      <PlusCircle className="h-4 w-4" />
-                      <span className="text-[11px] font-black uppercase tracking-widest">Record Fee Payment</span>
-                    </div>
-                    <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-                      <div className="space-y-2">
-                        <Label className="text-[10px] font-black text-gray-400 uppercase tracking-widest">Amount Collected (₹)</Label>
-                        <Input type="number" className="bg-gray-50 border-none h-12 rounded-xl font-bold" value={formData.amount} onChange={e => setFormData({...formData, amount: e.target.value})} required />
-                      </div>
-                      <div className="space-y-2">
-                        <Label className="text-[10px] font-black text-gray-400 uppercase tracking-widest">Collection Date</Label>
-                        <Input type="date" className="bg-gray-50 border-none h-12 rounded-xl" value={formData.date} onChange={e => setFormData({...formData, date: e.target.value})} required />
-                      </div>
-                    </div>
-                    <div className="space-y-2">
-                      <Label className="text-[10px] font-black text-gray-400 uppercase tracking-widest">Collection Mode</Label>
-                      <Select value={formData.mode} onValueChange={(val: any) => setFormData({...formData, mode: val})}>
-                        <SelectTrigger className="bg-gray-50 border-none h-12 rounded-xl font-bold"><SelectValue /></SelectTrigger>
-                        <SelectContent><SelectItem value="Cash">Physical Cash</SelectItem><SelectItem value="Online">Online Transfer</SelectItem></SelectContent>
-                      </Select>
-                    </div>
-                    {formData.mode === 'Online' && (
-                      <div 
-                        className="h-24 border-2 border-dashed border-gray-100 rounded-2xl flex flex-col items-center justify-center cursor-pointer hover:bg-gray-50"
-                        onClick={() => fileInputRef.current?.click()}
-                      >
-                        {formData.screenshot ? <p className="text-xs font-bold text-green-600">Receipt Attached</p> : <p className="text-xs font-bold text-gray-400">Click to upload transaction proof</p>}
-                        <input type="file" className="hidden" accept="image/*" onChange={handleFileChange} />
-                      </div>
-                    )}
-                    <Button type="submit" className="w-full bg-[#22C55E] hover:bg-[#22C55E]/90 h-14 font-black rounded-xl shadow-lg">Save Fee Record</Button>
-                  </form>
-                </ScrollArea>
+                </div>
               </div>
             </div>
           </DialogContent>
