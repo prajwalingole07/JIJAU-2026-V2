@@ -296,7 +296,7 @@
       
               {/* Staff Ledger Dialog */}
               <Dialog open={staffHistoryOpen} onOpenChange={setStaffHistoryOpen}>
-                <DialogContent className="flex max-h-[94svh] w-[96vw] max-w-[1000px] flex-col overflow-hidden border-none p-0 shadow-2xl md:h-[90vh] rounded-2xl">
+                <DialogContent className="flex h-[94svh] max-h-[94svh] w-[96vw] max-w-[1000px] flex-col overflow-hidden border-none p-0 shadow-2xl md:h-[90vh] rounded-2xl">
                   <DialogHeader className="sr-only">
                     <DialogTitle>Staff Salary Profile - {selectedStaff?.fullName}</DialogTitle>
                     <DialogDescription>Detailed ledger and transaction recording for {selectedStaff?.fullName}</DialogDescription>
@@ -312,7 +312,7 @@
                   </div>
       
                   <div className="flex min-h-0 flex-1 flex-col overflow-hidden bg-white md:flex-row">
-                    <div className="flex max-h-[42svh] w-full flex-col border-b border-gray-100 md:max-h-none md:w-[45%] md:border-b-0 md:border-r">
+                    <div className="flex h-[42svh] w-full flex-col border-b border-gray-100 md:h-auto md:max-h-none md:w-[45%] md:border-b-0 md:border-r">
                       <div className="p-6 border-b border-gray-100 flex items-center justify-between bg-gray-50/50">
                         <div className="flex items-center gap-2 text-primary">
                           <History className="h-4 w-4" />
